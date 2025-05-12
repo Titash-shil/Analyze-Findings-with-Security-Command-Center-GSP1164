@@ -31,12 +31,12 @@ echo
 
 echo "${YELLOW_TEXT}${BOLD_TEXT} Setting up a Pub/Sub Topic for Findings...${RESET_FORMAT}"
 gcloud pubsub topics create projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
-echo "${GREEN_TEXT}${BOLD_TEXT}✅ Pub/Sub Topic created successfully!${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Topic created successfully!${RESET_FORMAT}"
 echo
 
 echo "${MAGENTA_TEXT}${BOLD_TEXT} Creating a Subscription to the Pub/Sub Topic...${RESET_FORMAT}"
 gcloud pubsub subscriptions create export-findings-pubsub-topic-sub --topic=projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
-echo "${GREEN_TEXT}${BOLD_TEXT}✅ Pub/Sub Subscription created!${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Subscription created!${RESET_FORMAT}"
 echo
 
 echo "${BLUE_TEXT}${BOLD_TEXT} MANUAL STEP REQUIRED: Please follow the link below.${RESET_FORMAT}"
@@ -66,9 +66,9 @@ function check_progress {
 }
 
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
-echo "${RED_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${GREEN_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}        FOLLOW NEXT STEPS FROM THE VIDEO CAREFULLY!      ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
 echo
 echo "${CYAN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
@@ -125,17 +125,17 @@ echo "${GREEN_TEXT}${BOLD_TEXT} Service Accounts and Keys created successfully!$
 echo
 
 function wait_for_findings() {
-  echo "${BLUE_TEXT}${BOLD_TEXT}🕵️  Monitoring BigQuery for new findings...${RESET_FORMAT}"
+  echo "${BLUE_TEXT}${BOLD_TEXT}  Monitoring BigQuery for new findings...${RESET_FORMAT}"
   while true; do
   result=$(bq query --apilog=/dev/null --use_legacy_sql=false --format=pretty \
     "SELECT finding_id, event_time, finding.category FROM continuous_export_dataset.findings")
 
   if echo "$result" | grep -qE '^[|] [a-f0-9]{32} '; then
-    echo "${GREEN_TEXT}${BOLD_TEXT}🎉 Findings detected in BigQuery!${RESET_FORMAT}"
+    echo "${GREEN_TEXT}${BOLD_TEXT} Findings detected in BigQuery!${RESET_FORMAT}"
     echo "${WHITE_TEXT}$result${RESET_FORMAT}"
     break
   else
-    echo "${YELLOW_TEXT}${BOLD_TEXT}⏳ No findings yet. Will check again in 2 minutes...${RESET_FORMAT}"
+    echo "${YELLOW_TEXT}${BOLD_TEXT} No findings yet. Will check again in 2 minutes...${RESET_FORMAT}"
     for i in $(seq 120 -1 1); do
       printf "\r${YELLOW_TEXT}${BOLD_TEXT}   %3d seconds remaining...${RESET_FORMAT}" "$i"
       sleep 1
@@ -184,9 +184,9 @@ echo "${GREEN_TEXT}${BOLD_TEXT} 'findings.jsonl' uploaded to '$BUCKET_NAME'!${RE
 echo
 
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
-echo "${RED_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${GREEN_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}           FOLLOW NEXT STEPS THE VIDEO CAREFULLY!        ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
 echo
 
 echo "${GREEN_TEXT}${BOLD_TEXT} OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
