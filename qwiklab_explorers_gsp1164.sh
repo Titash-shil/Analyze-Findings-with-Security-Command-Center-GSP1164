@@ -52,7 +52,7 @@ function check_progress {
     read -r user_input
     if [[ "$user_input" == "Y" || "$user_input" == "y" ]]; then
       echo
-      echo "${GREEN_TEXT}${BOLD_TEXT}👍 Awesome! Continuing with the script...${RESET_FORMAT}"
+      echo "${GREEN_TEXT}${BOLD_TEXT} Great! Continuing with the script...${RESET_FORMAT}"
       echo
       break
     elif [[ "$user_input" == "N" || "$user_input" == "n" ]]; then
@@ -60,15 +60,15 @@ function check_progress {
       echo "${RED_TEXT}${BOLD_TEXT}❗ Please complete the manual step to create ${WHITE_TEXT}export-findings-pubsub${RED_TEXT}${BOLD_TEXT} in the SCC console and then enter 'Y' to proceed.${RESET_FORMAT}"
     else
       echo
-      echo "${MAGENTA_TEXT}${BOLD_TEXT}⚠️ Invalid input. Please enter Y or N.${RESET_FORMAT}"
+      echo "${MAGENTA_TEXT}${BOLD_TEXT} Invalid input. Please enter Y or N.${RESET_FORMAT}"
     fi
   done
 }
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}        FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
 echo
 echo "${CYAN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
@@ -184,9 +184,9 @@ echo "${GREEN_TEXT}${BOLD_TEXT} 'findings.jsonl' uploaded to '$BUCKET_NAME'!${RE
 echo
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}        FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
 echo
 
 echo "${GREEN_TEXT}${BOLD_TEXT}🔗 OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
