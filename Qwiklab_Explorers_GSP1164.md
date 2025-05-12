@@ -10,11 +10,11 @@
  - ### Copy & Run the Commands in Cloud Shell Terminal :
 
 ```
-curl -LO raw.githubusercontent.com/Titash-shil/Dataplex-Qwik-Start---Command-Line-GSP1144/refs/heads/main/qwiklab_explorers_gsp1144.sh
+curl -LO raw.githubusercontent.com/Titash-shil/Analyze-Findings-with-Security-Command-Center-GSP1164/refs/heads/main/qwiklab_explorers_gsp1164.sh
 
-sudo chmod +x qwiklab_explorers_gsp1144.sh
+sudo chmod +x qwiklab_explorers_gsp1164.sh
 
-./qwiklab_explorers_gsp1144.sh
+./qwiklab_explorers_gsp1164.sh
 ```
 
 - ### Paste this schema :
