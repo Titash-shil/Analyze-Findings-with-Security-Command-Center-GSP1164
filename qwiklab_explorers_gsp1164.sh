@@ -66,9 +66,9 @@ function check_progress {
 }
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
 echo
 echo "${CYAN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
@@ -184,9 +184,9 @@ echo "${GREEN_TEXT}${BOLD_TEXT} 'findings.jsonl' uploaded to '$BUCKET_NAME'!${RE
 echo
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!       ${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
 echo
 
 echo "${GREEN_TEXT}${BOLD_TEXT} OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
