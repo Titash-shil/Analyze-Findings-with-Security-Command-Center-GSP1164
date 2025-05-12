@@ -17,6 +17,23 @@ sudo chmod +x qwiklab_explorers_gsp1144.sh
 ./qwiklab_explorers_gsp1144.sh
 ```
 
+- ### Paste this schema :
+
+```
+[   
+  {
+    "mode": "NULLABLE",
+    "name": "resource",
+    "type": "JSON"
+  },   
+  {
+    "mode": "NULLABLE",
+    "name": "finding",
+    "type": "JSON"
+  }
+]
+```
+
 ---
 
 ## Congratulations ..!!🎉  You completed the lab shortly..😃💯
