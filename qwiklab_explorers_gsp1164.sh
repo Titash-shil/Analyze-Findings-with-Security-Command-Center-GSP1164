@@ -48,7 +48,7 @@ echo
 function check_progress {
   while true; do
     echo
-    echo -n "${YELLOW_TEXT}${BOLD_TEXT}🤔 Have you completed the manual step in the Google Cloud Console as per the video (created 'export-findings-pubsub')? (Y/N): ${RESET_FORMAT}"
+    echo -n "${YELLOW_TEXT}${BOLD_TEXT} Have you completed the manual step in the Google Cloud Console as per the video (created 'export-findings-pubsub')? (Y/N): ${RESET_FORMAT}"
     read -r user_input
     if [[ "$user_input" == "Y" || "$user_input" == "y" ]]; then
       echo
@@ -189,7 +189,7 @@ echo "${YELLOW_TEXT}${BOLD_TEXT}          FOLLOW NEXT STEPS THE VIDEO CAREFULLY!
 echo "${YELLOW_TEXT}${BOLD_TEXT} ///////////////////////////////////////////////////// ${RESET_FORMAT}"
 echo
 
-echo "${GREEN_TEXT}${BOLD_TEXT}🔗 OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
 echo "${WHITE_TEXT}${UNDERLINE_TEXT}https://console.cloud.google.com/bigquery?project=$DEVSHELL_PROJECT_ID${RESET_FORMAT}"
 echo
 echo "${GREEN_TEXT}${BOLD_TEXT}   In BigQuery, you will be working with a table. The suggested name is: ${WHITE_TEXT}old_findings${RESET_FORMAT}"
