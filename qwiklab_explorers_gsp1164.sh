@@ -13,36 +13,32 @@ UNDERLINE_TEXT=$'\033[4m'
 
 clear
 
-echo "${GREEN_TEXT}   Fetching your active Project ID.${RESET_FORMAT}"
+echo "${CYAN_TEXT}   Fetching your active Project ID.${RESET_FORMAT}"
 export PROJECT_ID=$(gcloud config get project)
 
-echo "${GREEN_TEXT}   Identifying the default Compute Zone.${RESET_FORMAT}"
 export ZONE=$(gcloud compute project-info describe \
 --format="value(commonInstanceMetadata.items[google-compute-default-zone])")
 
-echo "${GREEN_TEXT}   Identifying the default Compute Region.${RESET_FORMAT}"
 export REGION=$(gcloud compute project-info describe \
 --format="value(commonInstanceMetadata.items[google-compute-default-region])")
 
+echo "${GREEN_TEXT}   Project ID set to: ${WHITE_TEXT}${BOLD_TEXT}$PROJECT_ID${RESET_FORMAT}"
+echo "${GREEN_TEXT}   Default Zone set to: ${WHITE_TEXT}${BOLD_TEXT}$ZONE${RESET_FORMAT}"
+echo "${GREEN_TEXT}   Default Region set to: ${WHITE_TEXT}${BOLD_TEXT}$REGION${RESET_FORMAT}"
+echo
 
 export BUCKET_NAME="scc-export-bucket-$PROJECT_ID"
-echo "${BLUE_TEXT}${BOLD_TEXT} The  Bucket name will be: ${WHITE_TEXT}${BOLD_TEXT}$BUCKET_NAME${RESET_FORMAT}"
+echo "${BLUE_TEXT}${BOLD_TEXT}   Bucket name will be: ${WHITE_TEXT}${BOLD_TEXT}$BUCKET_NAME${RESET_FORMAT}"
 echo
 
-echo "${YELLOW_TEXT}${BOLD_TEXT} Setting up a Pub/Sub Topic for Findings...${RESET_FORMAT}"
 gcloud pubsub topics create projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
-echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Topic created successfully!${RESET_FORMAT}"
-echo
 
-echo "${MAGENTA_TEXT}${BOLD_TEXT} Creating a Subscription to the Pub/Sub Topic...${RESET_FORMAT}"
 gcloud pubsub subscriptions create export-findings-pubsub-topic-sub --topic=projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
-echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Subscription created!${RESET_FORMAT}"
-echo
 
-echo "${BLUE_TEXT}${BOLD_TEXT} MANUAL STEP REQUIRED: Please follow the link below.${RESET_FORMAT}"
-echo "${GREEN_TEXT}   Open this URL in your browser to configure continuous export to Pub/Sub in Security Command Center:${RESET_FORMAT}"
+echo "${CYAN_TEXT}${BOLD_TEXT} MANUAL STEPS REQUIRED: Please follow the link below.${RESET_FORMAT}"
+echo "${BLUE_TEXT}   Open this URL in your browser to configure continuous export to Pub/Sub in Security Command Center:${RESET_FORMAT}"
 echo "${WHITE_TEXT}${UNDERLINE_TEXT}https://console.cloud.google.com/security/command-center/config/continuous-exports/pubsub?project=$DEVSHELL_PROJECT_ID${RESET_FORMAT}"
-echo "${BLUE_TEXT}${BOLD_TEXT}   Name the continuous export: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT}   Name the continuous export: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
 
 function check_progress {
@@ -52,12 +48,12 @@ function check_progress {
     read -r user_input
     if [[ "$user_input" == "Y" || "$user_input" == "y" ]]; then
       echo
-      echo "${GREEN_TEXT}${BOLD_TEXT} Great! Continuing with the script...${RESET_FORMAT}"
+      echo "${GREEN_TEXT}${BOLD_TEXT} Awesome! Continuing with the script...${RESET_FORMAT}"
       echo
       break
     elif [[ "$user_input" == "N" || "$user_input" == "n" ]]; then
       echo
-      echo "${RED_TEXT}${BOLD_TEXT}❗ Please complete the manual step to create ${WHITE_TEXT}export-findings-pubsub${RED_TEXT}${BOLD_TEXT} in the SCC console and then enter 'Y' to proceed.${RESET_FORMAT}"
+      echo "${RED_TEXT}${BOLD_TEXT} Please complete the manual step to create ${WHITE_TEXT}export-findings-pubsub${RED_TEXT}${BOLD_TEXT} in the SCC console and then enter 'Y' to proceed.${RESET_FORMAT}"
     else
       echo
       echo "${MAGENTA_TEXT}${BOLD_TEXT} Invalid input. Please enter Y or N.${RESET_FORMAT}"
@@ -66,11 +62,11 @@ function check_progress {
 }
 
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
-echo "${RED_TEXT}${BOLD_TEXT}        FOLLOW NEXT STEPS FROM THE VIDEO CAREFULLY!      ${RESET_FORMAT}"
-echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}         FOLLOW NEXT STEPS CAREFULLY FROM THE VIDEO      ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
 echo
-echo "${CYAN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
 check_progress
 
@@ -84,7 +80,7 @@ $PROJECT_ID:continuous_export_dataset
 
 
 check_and_enable_securitycenter() {
-  echo "${BLUE_TEXT}${BOLD_TEXT}  Checking Security Command Center API status...${RESET_FORMAT}"
+  echo "${BLUE_TEXT}${BOLD_TEXT} Checking Security Command Center API status...${RESET_FORMAT}"
   is_enabled=$(gcloud services list --enabled --filter="securitycenter.googleapis.com" --format="value(NAME)" 2>/dev/null)
 
   if [ "$is_enabled" == "securitycenter.googleapis.com" ]; then
@@ -93,7 +89,7 @@ check_and_enable_securitycenter() {
   echo "${YELLOW_TEXT}${BOLD_TEXT} Security Command Center API is not enabled. Activating it now... (This might take a moment)${RESET_FORMAT}"
   gcloud services enable securitycenter.googleapis.com --quiet >/dev/null 2>&1
 
-  echo "${MAGENTA_TEXT}${BOLD_TEXT} Waiting for the Security Command Center API to be fully enabled...${RESET_FORMAT}"
+  echo "${MAGENTA_TEXT}${BOLD_TEXT}  Waiting for the Security Command Center API to be fully enabled...${RESET_FORMAT}"
   while true; do
     is_enabled=$(gcloud services list --enabled --filter="securitycenter.googleapis.com" --format="value(NAME)" 2>/dev/null)
     if [ "$is_enabled" == "securitycenter.googleapis.com" ]; then
@@ -109,6 +105,7 @@ check_and_enable_securitycenter() {
 check_and_enable_securitycenter
 echo
 
+echo "${MAGENTA_TEXT}${BOLD_TEXT} Setting up SCC BigQuery Export Configuration...${RESET_FORMAT}"
 gcloud scc bqexports create scc-bq-cont-export --dataset=projects/$PROJECT_ID/datasets/continuous_export_dataset --project=$PROJECT_ID --quiet
 echo "${GREEN_TEXT}${BOLD_TEXT} SCC BigQuery Export configured!${RESET_FORMAT}"
 echo
@@ -184,18 +181,18 @@ echo "${GREEN_TEXT}${BOLD_TEXT} 'findings.jsonl' uploaded to '$BUCKET_NAME'!${RE
 echo
 
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
-echo "${RED_TEXT}${BOLD_TEXT}           FOLLOW NEXT STEPS THE VIDEO CAREFULLY!        ${RESET_FORMAT}"
-echo "${GREEN_TEXT}${BOLD_TEXT} ||||||||||||||||||||||||||||||||||||||||||||||||||||| ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}         FOLLOW NEXT STEPS CAREFULLY FROM THE VIDEO      ${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
 echo
 
 echo "${GREEN_TEXT}${BOLD_TEXT} OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
 echo "${WHITE_TEXT}${UNDERLINE_TEXT}https://console.cloud.google.com/bigquery?project=$DEVSHELL_PROJECT_ID${RESET_FORMAT}"
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT}   In BigQuery, you will be working with a table. The suggested name is: ${WHITE_TEXT}old_findings${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}   In BigQuery, you will be working with a table. The suggested name is: ${WHITE_TEXT}old_findings${RESET_FORMAT}"
 echo
 
 echo
-echo "${GREEN_TEXT}${BOLD_TEXT} Subscribe to QwikLab Explorers ${RESET_FORMAT}"
-echo "${BLUE_TEXT}${BOLD_TEXT}${UNDERLINE_TEXT}https://www.youtube.com/@qwiklabexplorers${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT} Subscribe to QwikLab Explorers! ${RESET_FORMAT}"
+echo "${BLUE_TEXT}${BOLD_TEXT}${UNDERLINE_TEXT}https://youtube.com/@qwiklabexplorers?si=jWXu9E6GVtqPduhX${RESET_FORMAT}"
 echo
