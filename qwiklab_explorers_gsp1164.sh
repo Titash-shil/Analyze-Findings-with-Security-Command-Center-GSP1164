@@ -13,12 +13,16 @@ UNDERLINE_TEXT=$'\033[4m'
 
 clear
 
+
+echo "${BLUE_TEXT}${BOLD_TEXT}  Gathering Your Google Cloud Project Details...${RESET_FORMAT}"
 echo "${CYAN_TEXT}   Fetching your active Project ID.${RESET_FORMAT}"
 export PROJECT_ID=$(gcloud config get project)
 
+echo "${CYAN_TEXT}   Identifying the default Compute Zone.${RESET_FORMAT}"
 export ZONE=$(gcloud compute project-info describe \
 --format="value(commonInstanceMetadata.items[google-compute-default-zone])")
 
+echo "${CYAN_TEXT}   Identifying the default Compute Region.${RESET_FORMAT}"
 export REGION=$(gcloud compute project-info describe \
 --format="value(commonInstanceMetadata.items[google-compute-default-region])")
 
@@ -31,14 +35,20 @@ export BUCKET_NAME="scc-export-bucket-$PROJECT_ID"
 echo "${BLUE_TEXT}${BOLD_TEXT}   Bucket name will be: ${WHITE_TEXT}${BOLD_TEXT}$BUCKET_NAME${RESET_FORMAT}"
 echo
 
+echo "${YELLOW_TEXT}${BOLD_TEXT} Setting up a Pub/Sub Topic for Findings...${RESET_FORMAT}"
 gcloud pubsub topics create projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
+echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Topic created successfully!${RESET_FORMAT}"
+echo
 
+echo "${MAGENTA_TEXT}${BOLD_TEXT} Creating a Subscription to the Pub/Sub Topic...${RESET_FORMAT}"
 gcloud pubsub subscriptions create export-findings-pubsub-topic-sub --topic=projects/$DEVSHELL_PROJECT_ID/topics/export-findings-pubsub-topic
+echo "${GREEN_TEXT}${BOLD_TEXT} Pub/Sub Subscription created!${RESET_FORMAT}"
+echo
 
-echo "${CYAN_TEXT}${BOLD_TEXT} MANUAL STEPS REQUIRED: Please follow the link below.${RESET_FORMAT}"
+echo "${BLUE_TEXT}${BOLD_TEXT} MANUAL STEP REQUIRED: Please follow the link below.${RESET_FORMAT}"
 echo "${BLUE_TEXT}   Open this URL in your browser to configure continuous export to Pub/Sub in Security Command Center:${RESET_FORMAT}"
 echo "${WHITE_TEXT}${UNDERLINE_TEXT}https://console.cloud.google.com/security/command-center/config/continuous-exports/pubsub?project=$DEVSHELL_PROJECT_ID${RESET_FORMAT}"
-echo "${GREEN_TEXT}${BOLD_TEXT}   Name the continuous export: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
+echo "${YELLOW_TEXT}${BOLD_TEXT}   Name the continuous export: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
 
 function check_progress {
@@ -56,31 +66,35 @@ function check_progress {
       echo "${RED_TEXT}${BOLD_TEXT} Please complete the manual step to create ${WHITE_TEXT}export-findings-pubsub${RED_TEXT}${BOLD_TEXT} in the SCC console and then enter 'Y' to proceed.${RESET_FORMAT}"
     else
       echo
-      echo "${MAGENTA_TEXT}${BOLD_TEXT} Invalid input. Please enter Y or N.${RESET_FORMAT}"
+      echo "${MAGENTA_TEXT}${BOLD_TEXT}⚠ Invalid input. Please enter Y or N.${RESET_FORMAT}"
     fi
   done
 }
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}         FOLLOW NEXT STEPS CAREFULLY FROM THE VIDEO      ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT}        Follow Next Steps from the video carefully!      ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
 echo
 echo "${GREEN_TEXT}${BOLD_TEXT}   Ensure the Continuous Export in SCC is named: ${WHITE_TEXT}export-findings-pubsub${RESET_FORMAT}"
 echo
 check_progress
 
+echo "${BLUE_TEXT}${BOLD_TEXT} Launching a new Compute Engine Instance...${RESET_FORMAT}"
 gcloud compute instances create instance-1 --zone=$ZONE \
 --machine-type e2-micro \
 --scopes=https://www.googleapis.com/auth/cloud-platform
+echo "${GREEN_TEXT}${BOLD_TEXT} Compute Instance 'instance-1' created!${RESET_FORMAT}"
+echo
 
-
+echo "${CYAN_TEXT}${BOLD_TEXT} Creating a BigQuery Dataset for Continuous Export...${RESET_FORMAT}"
 bq --location=$REGION --apilog=/dev/null mk --dataset \
 $PROJECT_ID:continuous_export_dataset
-
+echo "${GREEN_TEXT}${BOLD_TEXT} BigQuery Dataset 'continuous_export_dataset' created!${RESET_FORMAT}"
+echo
 
 check_and_enable_securitycenter() {
-  echo "${BLUE_TEXT}${BOLD_TEXT} Checking Security Command Center API status...${RESET_FORMAT}"
+  echo "${BLUE_TEXT}${BOLD_TEXT}  Checking Security Command Center API status...${RESET_FORMAT}"
   is_enabled=$(gcloud services list --enabled --filter="securitycenter.googleapis.com" --format="value(NAME)" 2>/dev/null)
 
   if [ "$is_enabled" == "securitycenter.googleapis.com" ]; then
@@ -132,7 +146,7 @@ function wait_for_findings() {
     echo "${WHITE_TEXT}$result${RESET_FORMAT}"
     break
   else
-    echo "${YELLOW_TEXT}${BOLD_TEXT} No findings yet. Will check again in 2 minutes...${RESET_FORMAT}"
+    echo "${YELLOW_TEXT}${BOLD_TEXT}⏳ No findings yet. Will check again in 2 minutes...${RESET_FORMAT}"
     for i in $(seq 120 -1 1); do
       printf "\r${YELLOW_TEXT}${BOLD_TEXT}   %3d seconds remaining...${RESET_FORMAT}" "$i"
       sleep 1
@@ -181,9 +195,9 @@ echo "${GREEN_TEXT}${BOLD_TEXT} 'findings.jsonl' uploaded to '$BUCKET_NAME'!${RE
 echo
 
 echo
-echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}         FOLLOW NEXT STEPS CAREFULLY FROM THE VIDEO      ${RESET_FORMAT}"
-echo "${YELLOW_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
+echo "${GREEN_TEXT}${BOLD_TEXT}        Follow Next Steps from the video carefully!      ${RESET_FORMAT}"
+echo "${RED_TEXT}${BOLD_TEXT}|||||||||||||||||||||||||||||||||||||||||||||||||||||||||${RESET_FORMAT}"
 echo
 
 echo "${GREEN_TEXT}${BOLD_TEXT} OPEN BIGQUERY CONSOLE FOR NEXT STEPS:${RESET_FORMAT}"
@@ -194,5 +208,5 @@ echo
 
 echo
 echo "${GREEN_TEXT}${BOLD_TEXT} Subscribe to QwikLab Explorers! ${RESET_FORMAT}"
-echo "${BLUE_TEXT}${BOLD_TEXT}${UNDERLINE_TEXT}https://youtube.com/@qwiklabexplorers?si=jWXu9E6GVtqPduhX${RESET_FORMAT}"
+echo "${BLUE_TEXT}${BOLD_TEXT}${UNDERLINE_TEXT}https://youtube.com/@qwiklabexplorers?si=dAZpKg0QXjjmrxP-${RESET_FORMAT}"
 echo
